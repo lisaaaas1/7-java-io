@@ -1,5 +1,6 @@
 package com.example.task01;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -8,14 +9,25 @@ public class Task01Main {
         //здесь вы можете вручную протестировать ваше решение, вызывая реализуемый метод и смотря результат
         // например вот так:
 
-        /*
-        System.out.println(checkSumOfStream(new ByteArrayInputStream(new byte[]{0x33, 0x45, 0x01})));
-        */
+        // System.out.println(checkSumOfStream(new ByteArrayInputStream(new byte[]{0x33, 0x45, 0x01})));
+
 
     }
 
     public static int checkSumOfStream(InputStream inputStream) throws IOException {
-        // your implementation here
-        return 0;
+        if (inputStream == null) { // проверка на пустоту потока
+            throw new IllegalArgumentException();
+        }
+
+        int checksum = 0;
+        int currentByte = inputStream.read();
+
+        // чтение байтов из потока по одному
+        while (currentByte != -1) {
+            checksum = Integer.rotateLeft(checksum, 1) ^ currentByte;
+            currentByte = inputStream.read(); // читаем следующий
+        }
+
+        return checksum;
     }
 }
